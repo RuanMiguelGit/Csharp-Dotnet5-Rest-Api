@@ -1,9 +1,11 @@
+using Microsoft.OpenApi.Models;
 using FilmesApi.Data;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.EntityFrameworkCore.Proxies;
 using Microsoft.Extensions.Hosting;
 
 namespace FilmesApi
@@ -20,8 +22,14 @@ namespace FilmesApi
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<FilmeContext>(options => options.UseMySQL(Configuration.GetConnectionString("FilmeConnection")));
+            services.AddDbContext<AppDbContext>(options => options.UseLazyLoadingProxies().UseMySQL(Configuration.GetConnectionString("FilmeConnection")));
             services.AddControllers();
+             services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "FilmesAPI", Version = "v1" });
+            });
+            // services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+             services.AddAutoMapper(typeof(Startup));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
