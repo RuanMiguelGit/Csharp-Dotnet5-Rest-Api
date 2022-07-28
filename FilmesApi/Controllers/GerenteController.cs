@@ -39,7 +39,7 @@ namespace FilmesApi.Controllers
 
         }
 
-        [HttpGet]
+        [HttpGet("{id}")]
         public IActionResult RecuperaGerentesPorId(int id)
         {
                Gerente gerente = _context.Gerentes.FirstOrDefault(gerente => gerente.Id == id);
@@ -51,6 +51,12 @@ namespace FilmesApi.Controllers
             }
             return NotFound();
         }
+        [HttpGet]
+        public IActionResult RecuperaGerente()
+        {
+            return Ok(_context.Gerentes);
+        }
+
     }
 
 }

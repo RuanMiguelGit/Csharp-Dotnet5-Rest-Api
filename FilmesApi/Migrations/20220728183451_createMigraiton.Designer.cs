@@ -8,8 +8,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FilmesApi.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20220726200430_firstmiration")]
-    partial class firstmiration
+    [Migration("20220728183451_createMigraiton")]
+    partial class createMigraiton
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -27,6 +27,9 @@ namespace FilmesApi.Migrations
                     b.Property<int>("EnderecoId")
                         .HasColumnType("int");
 
+                    b.Property<int>("GerenteId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Nome")
                         .IsRequired()
                         .HasColumnType("text");
@@ -35,6 +38,8 @@ namespace FilmesApi.Migrations
 
                     b.HasIndex("EnderecoId")
                         .IsUnique();
+
+                    b.HasIndex("GerenteId");
 
                     b.ToTable("Cinemas");
                 });
@@ -107,12 +112,25 @@ namespace FilmesApi.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("FilmesAPI.Models.Gerente", "Gerente")
+                        .WithMany("Cinemas")
+                        .HasForeignKey("GerenteId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("Endereco");
+
+                    b.Navigation("Gerente");
                 });
 
             modelBuilder.Entity("FilmesAPI.Models.Endereco", b =>
                 {
                     b.Navigation("Cinema");
+                });
+
+            modelBuilder.Entity("FilmesAPI.Models.Gerente", b =>
+                {
+                    b.Navigation("Cinemas");
                 });
 #pragma warning restore 612, 618
         }

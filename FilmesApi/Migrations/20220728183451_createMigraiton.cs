@@ -3,7 +3,7 @@ using MySql.EntityFrameworkCore.Metadata;
 
 namespace FilmesApi.Migrations
 {
-    public partial class firstmiration : Migration
+    public partial class createMigraiton : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -58,7 +58,8 @@ namespace FilmesApi.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySQL:ValueGenerationStrategy", MySQLValueGenerationStrategy.IdentityColumn),
                     Nome = table.Column<string>(type: "text", nullable: false),
-                    EnderecoId = table.Column<int>(type: "int", nullable: false)
+                    EnderecoId = table.Column<int>(type: "int", nullable: false),
+                    GerenteId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -69,6 +70,12 @@ namespace FilmesApi.Migrations
                         principalTable: "Enderecos",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Cinemas_Gerentes_GerenteId",
+                        column: x => x.GerenteId,
+                        principalTable: "Gerentes",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
@@ -76,6 +83,11 @@ namespace FilmesApi.Migrations
                 table: "Cinemas",
                 column: "EnderecoId",
                 unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Cinemas_GerenteId",
+                table: "Cinemas",
+                column: "GerenteId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -87,10 +99,10 @@ namespace FilmesApi.Migrations
                 name: "Filmes");
 
             migrationBuilder.DropTable(
-                name: "Gerentes");
+                name: "Enderecos");
 
             migrationBuilder.DropTable(
-                name: "Enderecos");
+                name: "Gerentes");
         }
     }
 }

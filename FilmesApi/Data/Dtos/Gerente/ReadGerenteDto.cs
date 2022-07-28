@@ -17,6 +17,8 @@ namespace FilmesAPI.Data.Dtos
         public string Nome { get; set; }
         // public object Endereco { get; set; }
         // public Endereco Endereco { get; set; }
+        public object Cinemas { get; set; }
+
         
         
     }
