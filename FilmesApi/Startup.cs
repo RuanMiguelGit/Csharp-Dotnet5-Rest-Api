@@ -7,6 +7,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.EntityFrameworkCore.Proxies;
 using Microsoft.Extensions.Hosting;
+using System.Text.Json.Serialization;
+
 
 namespace FilmesApi
 {
@@ -30,6 +32,7 @@ namespace FilmesApi
             });
             // services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
              services.AddAutoMapper(typeof(Startup));
+             services.AddControllers().AddJsonOptions(x=> x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.Preserve);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
