@@ -8,7 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-
+using FilmesApi.Services;
 
 
 namespace FilmesApi.Controllers
@@ -17,33 +17,28 @@ namespace FilmesApi.Controllers
     [Route("[controller]")]
     public class FilmeController : ControllerBase
     {
-        private AppDbContext _context;
-        private IMapper _mapper;
+        private FilmeService _filmeService;
 
-
-        public FilmeController(AppDbContext context, IMapper mapper) 
+        public FilmeController(FilmeService filmeService) 
         {
-            _context = context;
-            _mapper = mapper;
+          _filmeService = filmeService;
         }
 
         [HttpPost]
         public IActionResult AdicionaFilme([FromBody] CreateFilmeDto filmeDto)
         {
-            Filme filme = _mapper.Map<Filme>(filmeDto);
-            _context.Filmes.Add(filme);
-            _context.SaveChanges();
-            return CreatedAtAction(nameof(RecuperaFilmesPorId), new { Id = filme.Id }, filme);
+          ReadFilmeDto readDto =  _filmeService.AdicionaFilme(filmeDto);
+           
+            return CreatedAtAction(nameof(RecuperaFilmesPorId), new { Id = readDto.Id }, readDto);
         }
         [HttpGet]
         public IActionResult RecuperaFilmes([FromQuery] int xablau)
         {
-            List<Filme> filmes = _context.Filmes.Where(f=> f.Duracao <= xablau).ToList();
-
-            if(filmes != null) {
-                List<ReadFilmeDto> dto = _mapper.Map<List<ReadFilmeDto>>(filmes);
-                return Ok(dto);
+            List<ReadFilmeDto> readDto =  _filmeService.RecuperaFilmes(xablau);
+            if(readDto != null) {
+                return Ok(readDto);
             }
+          
             return NotFound();
       
         }
@@ -51,41 +46,40 @@ namespace FilmesApi.Controllers
         [HttpGet("{id}")]
         public IActionResult RecuperaFilmesPorId(int id)
         {
-            Filme filme = _context.Filmes.FirstOrDefault(filme => filme.Id == id);
-               if(filme != null)
-            {
-                ReadFilmeDto filmeDto = _mapper.Map<ReadFilmeDto>(filme);
 
-                return Ok(filmeDto);
+            ReadFilmeDto readDto = _filmeService.RecuperaFilmesPorId(id);
+            if(readDto != null){
+                return Ok(readDto);
             }
             return NotFound();
         }
 
-        [HttpPut("{id}")]
-        public IActionResult AtualizaFilme(int id, [FromBody] UpdateFilmeDto filmeDto)
-        {
-            Filme filme = _context.Filmes.FirstOrDefault(filme => filme.Id == id);
-            if(filme == null){
-                return NotFound();
-            }
+        // [HttpPut("{id}")]
+        // public IActionResult AtualizaFilme(int id, [FromBody] UpdateFilmeDto filmeDto)
+        // {
+        //     // ReadFilmeDto readDto = _filmeService.AtualizaFilme( UpdateFilmeDto filmeDto);
+        //     Filme filme = _context.Filmes.FirstOrDefault(filme => filme.Id == id);
+        //     if(filme == null){
+        //         return NotFound();
+        //     }
 
-            _mapper.Map(filmeDto, filme);
-            _context.SaveChanges();
-            return NoContent();
+        //     _mapper.Map(filmeDto, filme);
+        //     _context.SaveChanges();
+        //     return NoContent();
 
-        }
+        // }
 
-        [HttpDelete("{id}")]
-        public IActionResult DeletaFilme(int id)
-        {
-              Filme filme = _context.Filmes.FirstOrDefault(filme => filme.Id == id);
-            if(filme == null){
-                return NotFound();
-            }
-            _context.Remove(filme);
-            _context.SaveChanges();
-            return NoContent();
-        }
+        // [HttpDelete("{id}")]
+        // public IActionResult DeletaFilme(int id)
+        // {
+        //       Filme filme = _context.Filmes.FirstOrDefault(filme => filme.Id == id);
+        //     if(filme == null){
+        //         return NotFound();
+        //     }
+        //     _context.Remove(filme);
+        //     _context.SaveChanges();
+        //     return NoContent();
+        // }
     }
 
 }
