@@ -32,6 +32,34 @@ namespace FilmesApi.Services
 
         }
 
+       public  List<ReadCinemaDto> RecuperaCinemas([FromQuery] string nomeDoFilme)
+       {
+                if(nomeDoFilme == null) {
+                return null;
+            }
+            List<Cinema> cinemas = _context.Cinemas.ToList();
+         
+
+            if(!string.IsNullOrEmpty(nomeDoFilme)){
+                IEnumerable<Cinema> query = from cinema in cinemas 
+                where cinema.Sessoes.Any(sessao =>sessao.Filme.Titulo == nomeDoFilme)
+                select cinema;
+                cinemas = query.ToList();
+            }
+
+            return _mapper.Map<List<ReadCinemaDto>>(cinemas);
+       }
+
+        public ReadCinemaDto RecuperaCinemasPorId(int id)
+        {
+            Cinema cinema = _context.Cinemas.FirstOrDefault(cinema => cinema.Id == id);
+            if(cinema != null)
+            {
+                ReadCinemaDto cinemaDto = _mapper.Map<ReadCinemaDto>(cinema);
+                return cinemaDto;
+            }
+            return null;
+        }
 
 
     }
