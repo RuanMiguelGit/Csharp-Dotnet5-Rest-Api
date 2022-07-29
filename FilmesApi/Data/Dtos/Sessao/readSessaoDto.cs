@@ -12,7 +12,7 @@ namespace FilmesAPI.Data.Dtos
         public Cinema Cinema { get; set; }
         public Filme Filme { get; set; }
         public int Id  {get; set;}   
-        public DateTime HorarioDeInicio {get; set;}
+        // public DateTime HorarioDeInicio {get; set;}
         // public int EnderecoFK { get; set; }
         // public int GerenteFK { get; set; }
     }

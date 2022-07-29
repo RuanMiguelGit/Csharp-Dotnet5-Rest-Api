@@ -11,7 +11,6 @@ using System.Threading.Tasks;
 
 
 
-
 namespace FilmesApi.Controllers
 {
     [ApiController]
@@ -37,9 +36,16 @@ namespace FilmesApi.Controllers
             return CreatedAtAction(nameof(RecuperaFilmesPorId), new { Id = filme.Id }, filme);
         }
         [HttpGet]
-        public IActionResult RecuperaFilmes()
+        public IActionResult RecuperaFilmes([FromQuery] int xablau)
         {
-            return Ok(_context.Filmes);
+            List<Filme> filmes = _context.Filmes.Where(f=> f.Duracao <= xablau).ToList();
+
+            if(filmes != null) {
+                List<ReadFilmeDto> dto = _mapper.Map<List<ReadFilmeDto>>(filmes);
+                return Ok(dto);
+            }
+            return NotFound();
+      
         }
 
         [HttpGet("{id}")]
