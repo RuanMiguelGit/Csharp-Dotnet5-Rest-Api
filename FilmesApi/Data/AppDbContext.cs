@@ -5,7 +5,7 @@ namespace FilmesApi.Data
 {
     public class AppDbContext : DbContext
     {
-        public AppDbContext(DbContextOptions<AppDbContext> opt) : base(opt)
+        public AppDbContext(DbContextOptions<AppDbContext> opt) : base(opt) 
         {
 
         }
@@ -38,6 +38,8 @@ namespace FilmesApi.Data
         public DbSet<Endereco> Enderecos {get; set;}
         public DbSet<Gerente> Gerentes {get; set;}
         public DbSet<Sessao> Sessoes {get; set;}
+        public DbSet<Usuario> Usuarios {get; set;}
+
 
     }
 }

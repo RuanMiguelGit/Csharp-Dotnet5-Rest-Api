@@ -8,7 +8,14 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.EntityFrameworkCore.Proxies;
 using Microsoft.Extensions.Hosting;
 using System.Text.Json.Serialization;
-
+using FilmesApi.Services;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using System;
+using System.Text;
 
 namespace FilmesApi
 {
@@ -25,6 +32,29 @@ namespace FilmesApi
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<AppDbContext>(options => options.UseLazyLoadingProxies().UseMySQL(Configuration.GetConnectionString("FilmeConnection")));
+            services.AddAuthentication(auth =>
+            {
+                auth.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                auth.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
+            .AddJwtBearer(token =>
+            {
+                token.RequireHttpsMetadata = false;
+                token.SaveToken = true;
+                token.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = new SymmetricSecurityKey(
+                    Encoding.UTF8.GetBytes("0asdjas09djsa09djasdjsadajsd09asjd09sajcnzxn")),
+                    ValidateIssuer = false,
+                    ValidateAudience = false,
+                    ClockSkew = TimeSpan.Zero
+                };
+            });
+
+            services.AddScoped<FilmeService,FilmeService>();
+            services.AddScoped<CinemaService, CinemaService>();
+
             services.AddControllers();
              services.AddSwaggerGen(c =>
             {
@@ -47,9 +77,11 @@ namespace FilmesApi
 
             app.UseRouting();
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
-            app.UseEndpoints(endpoints =>
+            
+             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
             });

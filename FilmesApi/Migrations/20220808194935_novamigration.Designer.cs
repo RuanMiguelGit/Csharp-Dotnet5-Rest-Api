@@ -9,8 +9,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FilmesApi.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20220728202531_updatemigrations")]
-    partial class updatemigrations
+    [Migration("20220808194935_novamigration")]
+    partial class novamigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -127,6 +127,23 @@ namespace FilmesApi.Migrations
                     b.HasIndex("FilmeId");
 
                     b.ToTable("Sessoes");
+                });
+
+            modelBuilder.Entity("FilmesAPI.Models.Usuario", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<string>("Email")
+                        .HasColumnType("text");
+
+                    b.Property<string>("UserName")
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Usuarios");
                 });
 
             modelBuilder.Entity("FilmesAPI.Models.Cinema", b =>

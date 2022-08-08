@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using FilmesApi.Services;
+using FluentResults;
 
 
 namespace FilmesAPI.Controllers
@@ -57,32 +58,22 @@ namespace FilmesAPI.Controllers
         
         }
 
-        // [HttpPut("{id}")]
-        // public IActionResult AtualizaCinema(int id, [FromBody] UpdateCinemaDto cinemaDto)
-        // {
-        //     Cinema cinema = _context.Cinemas.FirstOrDefault(cinema => cinema.Id == id);
-        //     if(cinema == null)
-        //     {
-        //         return NotFound();
-        //     }
-        //     _mapper.Map(cinemaDto, cinema);
-        //     _context.SaveChanges();
-        //     return NoContent();
-        // }
+        [HttpPut("{id}")]
+        public IActionResult AtualizaCinema(int id, [FromBody] UpdateCinemaDto cinemaDto)
+        {
+           Result result = _cinemaService.AtualizaCinema(id, cinemaDto);
+           if(result.IsFailed) return NotFound();
+            return NoContent();
+        }
 
 
-        // [HttpDelete("{id}")]
-        // public IActionResult DeletaCinema(int id)
-        // {
-        //     Cinema cinema = _context.Cinemas.FirstOrDefault(cinema => cinema.Id == id);
-        //     if (cinema == null)
-        //     {
-        //         return NotFound();
-        //     }
-        //     _context.Remove(cinema);
-        //     _context.SaveChanges();
-        //     return NoContent();
-        // }
+        [HttpDelete("{id}")]
+        public IActionResult DeletaCinema(int id)
+        {
+            Result result = _cinemaService.DeletaCinema(id);
+            if(result.IsFailed) return NotFound();
+            return NoContent();
+        }
 
     }
 }

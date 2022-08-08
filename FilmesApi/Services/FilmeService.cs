@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using FluentResults;
 
 namespace FilmesApi.Services
 {
@@ -54,28 +55,30 @@ namespace FilmesApi.Services
             return null;
         }
 
-        // public ReadFilmeDto AtualizaFilme(int id, [FromBody] UpdateFilmeDto filmeDto)
-        // {
-        //     Filme filme = _context.Filmes.FirstOrDefault(filme => filme.Id == id);
-        //     if(filme == null){
-        //         return NotFound();
-        //     }
+        public Result AtualizaFilme(int id, [FromBody] UpdateFilmeDto filmeDto)
+        {
+            Filme filme = _context.Filmes.FirstOrDefault(filme => filme.Id == id);
+            if(filme == null){
+                return Result.Fail("Filme não encontrado");
+            }
 
-        //     _mapper.Map(filmeDto, filme);
-        //     _context.SaveChanges();
-        //     return null;
-        // }
+            _mapper.Map(filmeDto, filme);
+            _context.SaveChanges();
+            return Result.Ok();
+        }
 
-        // public ReadFilmeDto DeletaFilme(int id)
-        // {
-        //       Filme filme = _context.Filmes.FirstOrDefault(filme => filme.Id == id);
-        //     if(filme == null){
-        //         return NotFound();
-        //     }
-        //     _context.Remove(filme);
-        //     _context.SaveChanges();
-        //     return null;
-        // }
+        public Result DeletaFilme(int id)
+        {
+            Filme filme = _context.Filmes.FirstOrDefault(filme => filme.Id == id);
+            if(filme == null){
+                return Result.Fail("O filme não pode ser deletado");
+            }
+            _context.Remove(filme);
+            _context.SaveChanges();
+            return Result.Ok();
+        }
+
+     
 
 
     }

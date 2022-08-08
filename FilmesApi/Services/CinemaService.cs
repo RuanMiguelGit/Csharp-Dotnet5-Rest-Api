@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using FluentResults;
 
 namespace FilmesApi.Services
 {
@@ -59,6 +60,30 @@ namespace FilmesApi.Services
                 return cinemaDto;
             }
             return null;
+        }
+
+        public Result AtualizaCinema(int id, [FromBody] UpdateCinemaDto cinemaDto)
+        {
+            Cinema cinema = _context.Cinemas.FirstOrDefault(cinema => cinema.Id == id);
+            if(cinema == null)
+            {
+                return Result.Fail("O cinema não pode ser atualizado");
+            }
+            _mapper.Map(cinemaDto, cinema);
+            _context.SaveChanges();
+            return Result.Ok();
+        }
+
+        public Result DeletaCinema(int id)
+        {
+            Cinema cinema = _context.Cinemas.FirstOrDefault(cinema => cinema.Id == id);
+            if (cinema == null)
+            {
+                return Result.Fail("O cinema não pode ser deletado");
+            }
+            _context.Remove(cinema);
+            _context.SaveChanges();
+            return Result.Ok();
         }
 
 

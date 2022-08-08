@@ -9,6 +9,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using FilmesApi.Services;
+using FluentResults;
+using Microsoft.AspNetCore.Authorization;
+
 
 
 namespace FilmesApi.Controllers
@@ -25,6 +28,7 @@ namespace FilmesApi.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "admin")]
         public IActionResult AdicionaFilme([FromBody] CreateFilmeDto filmeDto)
         {
           ReadFilmeDto readDto =  _filmeService.AdicionaFilme(filmeDto);
@@ -54,32 +58,22 @@ namespace FilmesApi.Controllers
             return NotFound();
         }
 
-        // [HttpPut("{id}")]
-        // public IActionResult AtualizaFilme(int id, [FromBody] UpdateFilmeDto filmeDto)
-        // {
-        //     // ReadFilmeDto readDto = _filmeService.AtualizaFilme( UpdateFilmeDto filmeDto);
-        //     Filme filme = _context.Filmes.FirstOrDefault(filme => filme.Id == id);
-        //     if(filme == null){
-        //         return NotFound();
-        //     }
+        [HttpPut("{id}")]
+        public IActionResult AtualizaFilme(int id, [FromBody] UpdateFilmeDto filmeDto)
+        {
+            Result result = _filmeService.AtualizaFilme(id, filmeDto);
+            if(result.IsFailed) return NotFound();
+            return NoContent();
 
-        //     _mapper.Map(filmeDto, filme);
-        //     _context.SaveChanges();
-        //     return NoContent();
+        }
 
-        // }
-
-        // [HttpDelete("{id}")]
-        // public IActionResult DeletaFilme(int id)
-        // {
-        //       Filme filme = _context.Filmes.FirstOrDefault(filme => filme.Id == id);
-        //     if(filme == null){
-        //         return NotFound();
-        //     }
-        //     _context.Remove(filme);
-        //     _context.SaveChanges();
-        //     return NoContent();
-        // }
+        [HttpDelete("{id}")]
+        public IActionResult DeletaFilme(int id)
+        {
+            Result result = _filmeService.DeletaFilme(id);
+            if(result.IsFailed) return NotFound();
+            return NoContent();
+        }
     }
 
 }

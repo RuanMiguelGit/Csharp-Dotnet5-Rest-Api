@@ -127,6 +127,23 @@ namespace FilmesApi.Migrations
                     b.ToTable("Sessoes");
                 });
 
+            modelBuilder.Entity("FilmesAPI.Models.Usuario", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<string>("Email")
+                        .HasColumnType("text");
+
+                    b.Property<string>("UserName")
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Usuarios");
+                });
+
             modelBuilder.Entity("FilmesAPI.Models.Cinema", b =>
                 {
                     b.HasOne("FilmesAPI.Models.Endereco", "Endereco")
