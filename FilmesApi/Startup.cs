@@ -16,6 +16,9 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using System;
 using System.Text;
+using FilmesApi.Authorization;
+using Microsoft.AspNetCore.Authorization;
+
 
 namespace FilmesApi
 {
@@ -52,8 +55,17 @@ namespace FilmesApi
                 };
             });
 
+            services.AddAuthorization(opt => {
+                opt.AddPolicy("IdadeMinima", policy => {
+                    policy.Requirements.Add(new IdadeMinimaRequirements(18));
+                });
+            });
+
+            services.AddSingleton<IAuthorizationHandler, IdadeMinimaHandler>();
             services.AddScoped<FilmeService,FilmeService>();
             services.AddScoped<CinemaService, CinemaService>();
+
+
 
             services.AddControllers();
              services.AddSwaggerGen(c =>

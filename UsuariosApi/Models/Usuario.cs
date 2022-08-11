@@ -1,4 +1,4 @@
-﻿
+﻿using System;
 namespace UsuariosApi.Models
 {
     public class Usuario
@@ -6,5 +6,7 @@ namespace UsuariosApi.Models
         public int Id { get; set; }
         public string Username { get; set; }
         public string Email { get; set; }
+        public DateTime DataDeNascimento { get; set; }
+
     }
 }

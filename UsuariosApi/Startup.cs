@@ -16,6 +16,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using UsuariosApi.Data;
 using UsuariosApi.Services;
+using UsuariosApi.Models;
 
 namespace UsuariosApi
 {
@@ -33,7 +34,7 @@ namespace UsuariosApi
         {
             services.AddDbContext<UserDbContext>(options => options.UseMySQL(Configuration.GetConnectionString("UsuarioConnection")));
             services
-                .AddIdentity<IdentityUser<int>, IdentityRole<int>>(
+                .AddIdentity<CustomIdentityUser, IdentityRole<int>>(
                     opt => {  
                         opt.SignIn.RequireConfirmedEmail = true;
                         // opt.User.RequireUniqueEmail = true;

@@ -36,6 +36,7 @@ namespace FilmesApi.Controllers
             return CreatedAtAction(nameof(RecuperaFilmesPorId), new { Id = readDto.Id }, readDto);
         }
         [HttpGet]
+        [Authorize(Roles = "admin, regular", Policy="IdadeMinima")]
         public IActionResult RecuperaFilmes([FromQuery] int xablau)
         {
             List<ReadFilmeDto> readDto =  _filmeService.RecuperaFilmes(xablau);

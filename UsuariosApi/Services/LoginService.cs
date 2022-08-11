@@ -15,11 +15,11 @@ namespace UsuariosApi.Services
 {
     public class LoginService
     {
-      private  SignInManager<IdentityUser<int>> _signInManager;
+      private  SignInManager<CustomIdentityUser> _signInManager;
       private TokenService _tokenService;
 
 
-    public LoginService( SignInManager<IdentityUser<int>> signInManager, TokenService tokenService)
+    public LoginService( SignInManager<CustomIdentityUser> signInManager, TokenService tokenService)
     {
         _tokenService = tokenService;
         _signInManager = signInManager;
